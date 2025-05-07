@@ -1,7 +1,6 @@
 import { users } from '~/users'
 import { compare } from 'bcrypt-ts'
-import { AuthenticatedRequest, User } from '~/type'
-import helper from '~/helper'
+import { AuthenticatedRequest } from '~/type'
 
 const checkCredential = async (email: string, password: string) => {
   if (!email || !password) {
@@ -26,23 +25,9 @@ const checkUserExits = (email: string) => {
   return users.find((el) => el.email === email)
 }
 
-const checkUserPermission = (req: AuthenticatedRequest, user: User) => {
-  const scope = user.scope
-  const method = req.method;
-  const path = req.baseUrl || req.path;
-
-  const pathSplit = path.split('/').filter(Boolean);
-  const resource = pathSplit[0];
-
-  const action = helper.methodToActionMap[method];
-  if (!action || !resource) {
-    return false;
-  }
-
-  const permission = `${resource}:${action}`;
-
-  return scope.includes(permission);
-
+const checkUserPermission = (req: AuthenticatedRequest, screenName: string) => {
+  const scope = req.user.scope
+  return scope.includes(screenName);
 }
 
 export default {checkCredential, checkUserExits, checkUserPermission}

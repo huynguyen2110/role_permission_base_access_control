@@ -8,7 +8,7 @@ const login = async (req: Request, res: Response) => {
     const password = req.body.password
     const user = await authService.checkCredential(email, password)
     const token = await tokenService.generateAuthToken(user)
-    res.status(200).send({ user, token })
+    res.status(200).send({ token })
   } catch (e) {
     if (e instanceof Error) {
       res.status(400).json({

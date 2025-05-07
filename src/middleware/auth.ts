@@ -22,18 +22,12 @@ const auth = async (req: AuthenticatedRequest, res: Response, next: NextFunction
       return;
     }
 
-    const isAuthorizedUser = authService.checkUserPermission(req, user)
-    if(!isAuthorizedUser) {
-      res.status(401).send({ error: 'Not authorized to access this resource' });
-      return;
-    }
-
     req.user = user;
     req.token = token;
     next();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
-    res.status(401).send({ error: 'Not authorized to access this resource' })
+    res.status(401).send({ error: 'Not valid user' })
   }
 };
 
